@@ -1,6 +1,6 @@
 h1 = @questionnaire.name
 
-= form_with url: save_responses_questionnaire_path(@questionnaire), method: :post do
+= form_with url: save_responses_questionnaire_path(@questionnaire), method: :post do |form|
   - @questionnaire.questions.each do |question|
     h2 = question.name
 

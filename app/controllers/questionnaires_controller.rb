@@ -58,6 +58,18 @@ class QuestionnairesController < ApplicationController
     end
   end
 
+  def save_responses
+    @questionnaire = Questionnaire.find(params[:id])
+
+    # Create new responses
+    params[:responses].each do |question_id, answer_id|
+      Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: answer_id)
+    end
+
+    redirect_to @questionnaire, notice: 'Responses saved successfully.'
+  end
+
+
   private
 
   # Use callbacks to share common setup or constraints between actions.
