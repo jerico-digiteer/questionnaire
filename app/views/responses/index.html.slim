@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Responses
+
+#responses
+  - @responses.each do |response|
+    == render response
+    p
+      = link_to "Show this response", response
+
+= link_to "New response", new_response_path
