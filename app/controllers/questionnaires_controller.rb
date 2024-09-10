@@ -61,15 +61,24 @@ class QuestionnairesController < ApplicationController
   def save_responses
     @questionnaire = Questionnaire.find(params[:id])
 
-    # Create new responses
-    params[:responses].each do |question_id, answer_id|
-      Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: answer_id)
+    # Process the responses
+    params[:responses]&.each do |question_id, response_text|
+      question = Question.find(question_id)
+      
+      if response_text.is_a?(Array)
+        # Handle multi-choice questions
+        response_text.each do |answer_id|
+          answer = question.answers.find(answer_id)
+          Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: answer.name)
+        end
+      else
+        # Handle single-choice and long-answer questions
+        Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: response_text)
+      end
     end
 
     redirect_to @questionnaire, notice: 'Responses saved successfully.'
   end
-
-
   private
 
   # Use callbacks to share common setup or constraints between actions.

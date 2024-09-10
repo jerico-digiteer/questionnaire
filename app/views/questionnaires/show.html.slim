@@ -9,19 +9,18 @@ h1 = @questionnaire.name
         - question.answers.each do |answer|
           p
             = radio_button_tag "responses[#{question.id}]", answer.id, @questionnaire.responses.find_by(question_id: question.id)&.response_text == answer.id.to_s
-            = answer.name
+            = label_tag "responses[#{question.id}]", answer.name
 
       - when 'multiple_choice'
         - question.answers.each do |answer|
           p
             = check_box_tag "responses[#{question.id}][]", answer.id, @questionnaire.responses.where(question_id: question.id).pluck(:response_text).include?(answer.id.to_s)
-            = answer.name
+            = label_tag "responses[#{question.id}][]", answer.name
 
       - when 'long_answer'
         = text_area_tag "responses[#{question.id}]", @questionnaire.responses.find_by(question_id: question.id)&.response_text
 
   = submit_tag 'Submit Responses'
-
 
 div
   = link_to "Back to questionnaires", questionnaires_path
