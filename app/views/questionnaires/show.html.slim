@@ -1,0 +1,23 @@
+h1 = @questionnaire.name
+
+- @questionnaire.questions.each do |question|
+  h2 = question.name
+
+  - case question.question_type
+    - when 'single_choice'
+      - question.answers.each do |answer|
+        p
+          = radio_button_tag question.id, answer.id
+          = answer.name
+
+    - when 'multiple_choice'
+      - question.answers.each do |answer|
+        p
+          = check_box_tag question.id, answer.id
+          = answer.name
+
+    - when 'long_answer'
+      = text_area_tag question.id
+
+div
+  =< link_to "Back to questionnaires", questionnaires_path

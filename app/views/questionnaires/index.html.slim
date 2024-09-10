@@ -1,0 +1,11 @@
+p style="color: green" = notice
+
+h1 Questionnaires
+
+#questionnaires
+  - @questionnaires.each do |questionnaire|
+    == render questionnaire
+    p
+      = link_to "Show this questionnaire", questionnaire
+
+= link_to "New questionnaire", new_questionnaire_path
