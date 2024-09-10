@@ -3,9 +3,9 @@
     = form.label :name
     = form.text_field :name
 
-  div data-controller="nested-form" data-level="1"
+  div data-controller="nested-form" data-nested-form-index-value='QUESTION_RECORD_1' data-level="1"
     template data-nested-form-target='template'
-      = form.fields_for :questions, Question.new, child_index: 'TEMPLATE_RECORD_1' do |question|
+      = form.fields_for :questions, Question.new, child_index: 'QUESTION_RECORD_1' do |question|
         = render 'question_fields', form: question
 
     = form.fields_for :questions do |question|

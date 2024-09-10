@@ -21,5 +21,8 @@ h1 = @questionnaire.name
 div
   =< link_to "Back to questionnaires", questionnaires_path
 
+  div
+    =< link_to "Edit this questionnaire", edit_questionnaire_path
+  
   div 
       = button_to "Destroy this survey", @post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', data: { turbo: 'false' }

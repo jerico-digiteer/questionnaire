@@ -12,9 +12,9 @@
     small
       = link_to "Remove", "#", data: { action: "click->nested-form#remove_association" }
 
-  div data-controller="nested-form" data-dynamic-select-target='choice' data-level="2"
+  div data-controller="nested-form" data-nested-form-index-value='ANSWER_RECORD_2' data-dynamic-select-target='choice' data-level="2"
     template data-nested-form-target='template'
-      = form.fields_for :answers, Answer.new, child_index: 'TEMPLATE_RECORD_2' do |answer|
+      = form.fields_for :answers, Answer.new, child_index: 'ANSWER_RECORD_2' do |answer|
         = render 'answer_fields', form: answer
 
     = form.fields_for :answers do |answer|
