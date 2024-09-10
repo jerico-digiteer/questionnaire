@@ -1,11 +1,12 @@
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
   static targets = ["add_item", "template"]
 
   add_association(event) {
     event.preventDefault()
-    var content = this.templateTarget.innerHTML.replace(/TEMPLATE_RECORD/g, new Date().getTime())
+    const pattern = `TEMPLATE_RECORD_${this.element.dataset.level}`;
+    let content = this.templateTarget.innerHTML.replace(new RegExp(pattern, "g"), new Date().getTime());
     this.add_itemTarget.insertAdjacentHTML('beforebegin', content)
   }
 

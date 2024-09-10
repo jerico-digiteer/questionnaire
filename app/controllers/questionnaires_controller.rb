@@ -1,5 +1,5 @@
 class QuestionnairesController < ApplicationController
-  before_action :set_questionnaire, only: %i[ show edit update destroy ]
+  before_action :set_questionnaire, only: %i[show edit update destroy]
 
   # GET /questionnaires or /questionnaires.json
   def index
@@ -13,6 +13,7 @@ class QuestionnairesController < ApplicationController
   # GET /questionnaires/new
   def new
     @questionnaire = Questionnaire.new
+    @questionnaire.questions.build # Initialize at least one question for new forms
   end
 
   # GET /questionnaires/1/edit
@@ -49,7 +50,7 @@ class QuestionnairesController < ApplicationController
 
   # DELETE /questionnaires/1 or /questionnaires/1.json
   def destroy
-    @questionnaire.destroy!
+    @questionnaire.destroy
 
     respond_to do |format|
       format.html { redirect_to questionnaires_url, notice: "Questionnaire was successfully destroyed." }
@@ -58,22 +59,23 @@ class QuestionnairesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_questionnaire
-      @questionnaire = Questionnaire.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def questionnaire_params
-      params.require(:questionnaire).permit(
+  # Use callbacks to share common setup or constraints between actions.
+  def set_questionnaire
+    @questionnaire = Questionnaire.find(params[:id])
+  end
+
+  # Only allow a list of trusted parameters through.
+  def questionnaire_params
+    params.require(:questionnaire).permit(
+      :name,
+      questions_attributes: [
+        :_destroy,
+        :id,
+        :question_type,
         :name,
-        questions_attributes: [
-          :_destroy,
-          :id,
-          :question_type,
-          :name,
-          answers_attributes: [:_destroy, :id, :name]
-        ]
-      )
-    end
+        answers_attributes: [:_destroy, :id, :name]
+      ]
+    )
+  end
 end

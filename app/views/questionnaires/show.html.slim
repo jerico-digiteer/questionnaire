@@ -2,7 +2,6 @@ h1 = @questionnaire.name
 
 - @questionnaire.questions.each do |question|
   h2 = question.name
-
   - case question.question_type
     - when 'single_choice'
       - question.answers.each do |answer|
@@ -21,3 +20,6 @@ h1 = @questionnaire.name
 
 div
   =< link_to "Back to questionnaires", questionnaires_path
+
+  div 
+      = button_to "Destroy this survey", @post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', data: { turbo: 'false' }
