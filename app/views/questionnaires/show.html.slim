@@ -1,28 +1,33 @@
 h1 = @questionnaire.name
 
-- @questionnaire.questions.each do |question|
-  h2 = question.name
-  - case question.question_type
-    - when 'single_choice'
-      - question.answers.each do |answer|
-        p
-          = radio_button_tag question.id, answer.id
-          = answer.name
+= form_with url: save_responses_questionnaire_path(@questionnaire), method: :post do
+  - @questionnaire.questions.each do |question|
+    h2 = question.name
 
-    - when 'multiple_choice'
-      - question.answers.each do |answer|
-        p
-          = check_box_tag question.id, answer.id
-          = answer.name
+    - case question.question_type
+      - when 'single_choice'
+        - question.answers.each do |answer|
+          p
+            = radio_button_tag "responses[#{question.id}]", answer.id, @questionnaire.responses.find_by(question_id: question.id)&.response_text == answer.id.to_s
+            = answer.name
 
-    - when 'long_answer'
-      = text_area_tag question.id
+      - when 'multiple_choice'
+        - question.answers.each do |answer|
+          p
+            = check_box_tag "responses[#{question.id}][]", answer.id, @questionnaire.responses.where(question_id: question.id).pluck(:response_text).include?(answer.id.to_s)
+            = answer.name
+
+      - when 'long_answer'
+        = text_area_tag "responses[#{question.id}]", @questionnaire.responses.find_by(question_id: question.id)&.response_text
+
+  = submit_tag 'Submit Responses'
+
 
 div
-  =< link_to "Back to questionnaires", questionnaires_path
+  = link_to "Back to questionnaires", questionnaires_path
 
-  div
-    =< link_to "Edit this questionnaire", edit_questionnaire_path
-  
-  div 
-      = button_to "Destroy this survey", @post, method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger', data: { turbo: 'false' }
+div
+  = link_to "Edit this questionnaire", edit_questionnaire_path(@questionnaire)
+
+div 
+  = button_to "Destroy this questionnaire", @questionnaire, method: :delete, data: { confirm: 'Are you sure?' }

@@ -57,6 +57,34 @@ class ResponsesController < ApplicationController
     end
   end
 
+  def save_responses
+    questionnaire = Questionnaire.find(params[:questionnaire_id])
+    responses = params[:responses]
+
+    ActiveRecord::Base.transaction do
+      responses.each do |question_id, response|
+        # For multiple-choice, `response` is an array of selected answer IDs
+        if response.is_a?(Array)
+          response.each do |answer_id|
+            Response.find_or_create_by!(
+              questionnaire_id: questionnaire.id,
+              question_id: question_id,
+              response_text: answer_id
+            )
+          end
+        else
+          Response.find_or_create_by!(
+            questionnaire_id: questionnaire.id,
+            question_id: question_id,
+            response_text: response
+          )
+        end
+      end
+    end
+
+    redirect_to questionnaire_path(questionnaire), notice: 'Responses were successfully saved.'
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_response
@@ -67,4 +95,5 @@ class ResponsesController < ApplicationController
     def response_params
       params.require(:response).permit(:questionnaire_id, :question_id, :response_text)
     end
+    
 end

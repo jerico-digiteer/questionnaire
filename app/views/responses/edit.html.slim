@@ -1,10 +1,19 @@
-h1 Editing response
+h1 Edit Response
 
-== render "form", response: @response
+= form_with model: @response, local: true do |form|
+  .field
+    = form.label :questionnaire_id, "Questionnaire"
+    = form.collection_select :questionnaire_id, Questionnaire.all, :id, :name, prompt: "Select a Questionnaire"
 
-br
+  .field
+    = form.label :question_id, "Question"
+    = form.collection_select :question_id, Question.where(questionnaire_id: @response.questionnaire_id), :id, :name, prompt: "Select a Question"
 
-div
-  => link_to "Show this response", @response
-  '|
-  =< link_to "Back to responses", responses_path
+  .field
+    = form.label :response_text, "Response"
+    = form.text_area :response_text
+
+  .actions
+    = form.submit 'Update Response'
+
+= link_to 'Back', responses_path

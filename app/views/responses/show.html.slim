@@ -1,10 +1,16 @@
-p style="color: green" = notice
+h1 Response Details
 
-== render @response
+.p
+  <strong>Questionnaire:</strong>
+  = @response.questionnaire.name
 
-div
-  => link_to "Edit this response", edit_response_path(@response)
-  '|
-  =< link_to "Back to responses", responses_path
+.p
+  <strong>Question:</strong>
+  = @response.question.name
 
-  = button_to "Destroy this response", @response, method: :delete
+.p
+  <strong>Response:</strong>
+  = @response.response_text
+
+= link_to 'Edit', edit_response_path(@response)
+= link_to 'Back', responses_path

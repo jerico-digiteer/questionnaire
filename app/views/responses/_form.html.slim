@@ -1,22 +1,15 @@
-= form_with(model: response) do |form|
-  - if response.errors.any?
-    div style="color: red"
-      h2 = "#{pluralize(response.errors.count, "error")} prohibited this response from being saved:"
-      ul
-        - response.errors.each do |error|
-          li = error.full_message
+= form_with model: @response, local: true do |form|
+  .field
+    = form.label :questionnaire_id, "Questionnaire"
+    = form.collection_select :questionnaire_id, Questionnaire.all, :id, :name, prompt: "Select a Questionnaire"
 
-  div
-    = form.label :questionnaire_id, style: "display: block"
-    = form.text_field :questionnaire_id
+  .field
+    = form.label :question_id, "Question"
+    = form.collection_select :question_id, Question.where(questionnaire_id: @response.questionnaire_id), :id, :name, prompt: "Select a Question"
 
-  div
-    = form.label :question_id, style: "display: block"
-    = form.text_field :question_id
-
-  div
-    = form.label :response_text, style: "display: block"
+  .field
+    = form.label :response_text, "Response"
     = form.text_area :response_text
 
-  div
+  .actions
     = form.submit
