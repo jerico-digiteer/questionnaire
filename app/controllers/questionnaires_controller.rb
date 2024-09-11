@@ -58,28 +58,27 @@ class QuestionnairesController < ApplicationController
     end
   end
 
+  #save responses
   def save_responses
     @questionnaire = Questionnaire.find(params[:id])
   
-    # Process the responses
     params[:responses]&.each do |question_id, response_text|
       question = Question.find(question_id)
   
       case question.question_type
       when 'multiple_choice'
-        # Handle multi-choice questions
-        response_text.each do |answer_id|
+
+        selected_answers = response_text.map do |answer_id|
           answer = question.answers.find(answer_id)
-          Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: answer.name)
+          answer.name
         end
+        Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: selected_answers.to_json)
   
       when 'single_choice'
-        # Handle single-choice questions
         answer = question.answers.find(response_text)
         Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: answer.name)
   
       when 'long_answer'
-        # Handle long-answer questions
         Response.create(questionnaire_id: @questionnaire.id, question_id: question_id, response_text: response_text)
       end
     end
