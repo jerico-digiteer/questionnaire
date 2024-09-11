@@ -8,17 +8,17 @@ h1 = @questionnaire.name
       - when 'single_choice'
         - question.answers.each do |answer|
           p
-            = radio_button_tag "responses[#{question.id}]", answer.id, @questionnaire.responses.find_by(question_id: question.id)&.response_text == answer.id.to_s
+            = radio_button_tag "responses[#{question.id}]", answer.id
             = label_tag "responses[#{question.id}]", answer.name
 
       - when 'multiple_choice'
         - question.answers.each do |answer|
           p
-            = check_box_tag "responses[#{question.id}][]", answer.id, @questionnaire.responses.where(question_id: question.id).pluck(:response_text).include?(answer.id.to_s)
+            = check_box_tag "responses[#{question.id}][]", answer.id
             = label_tag "responses[#{question.id}][]", answer.name
 
       - when 'long_answer'
-        = text_area_tag "responses[#{question.id}]", @questionnaire.responses.find_by(question_id: question.id)&.response_text
+        = text_area_tag "responses[#{question.id}]"
 
   = submit_tag 'Submit Responses'
 
@@ -29,4 +29,4 @@ div
   = link_to "Edit this questionnaire", edit_questionnaire_path(@questionnaire)
 
 div 
-  = button_to "Destroy this questionnaire", @questionnaire, method: :delete, data: { confirm: 'Are you sure?' }
+  = button_to "Destroy this questionnaire", @questionnaire, method: :delete, data: { confirm: 'Are you sure?'}
